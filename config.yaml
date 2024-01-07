@@ -3,7 +3,7 @@ dataset:
   names:
     ["preg", "plas", "pres", "skin", "test", "mass", "pedi", "age", "class"]
 model:
-  test_size: 0.3
+  test_size: 0.2
   seed: 7
   max_iterations: 500
   model_dir: "models"
