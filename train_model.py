@@ -48,7 +48,9 @@ def save_model_to_s3(model, config):
 
     model_dir = config["model"]["model_dir"]
     model_name = config["model"]["model_name"]
+
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    
     filename = f"{model_name}_v{timestamp}.joblib"
     local_file_path = os.path.join(model_dir, filename)
 
@@ -67,9 +69,12 @@ def save_model_to_s3(model, config):
 
 
 if __name__ == "__main__":
+    print("Reading dataset...")
     dataframe = read_dataset(config)
+    print("Preparing training data...")
     X_train, X_test, Y_train, Y_test = prepare_training_data(dataframe, config)
+    print("Training model...")
     model = train_model(X_train, Y_train, config)
     result = evaluate_model(model, X_test, Y_test)
-    print("Accuracy: %.3f%%" % (result * 100.0))
+    print("Model is trained. Accuracy: %.3f%%" % (result * 100.0))
     save_model_to_s3(model, config)
