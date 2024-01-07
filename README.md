@@ -59,7 +59,7 @@ pip install -r requirements.txt
 ### Model training
 
 - Change parameters in ```config.yaml```
-- ```python train_model.py```
+- Execute ```python train_model.py```
 - Trained model in ```.joblib``` format will be saved locally in ```/models``` and pushed to ```s3://equalexpertstask/models/``` (for simplicity and only for the purpose of this exersice the bucket is publicly accessible for the limited time)
 
 Model versioning is implemented by assigning the date and time of the .joblib file's creation to the model name.
