@@ -1,0 +1,8 @@
+Flask==3.0.0
+joblib
+numpy
+pandas
+PyYAML
+requests
+scikit-learn
+boto3

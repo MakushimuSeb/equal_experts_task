@@ -1,0 +1,40 @@
+name: ML pipeline workflow
+
+on: [push]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install flake8
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Run unit tests
+      run: |
+        python tests.py
+    - name: Deploy to EC2
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+      run: |
+        echo "$EC2_SSH_KEY" > ec2_ssh_key.pem
+        chmod 600 ec2_ssh_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_ssh_key.pem ubuntu@$EC2_HOST '
+          cd equal_experts && 
+          git pull && 
+          docker ps -q | xargs -r docker stop && 
+          docker build -t prediction_app . && 
+          docker run -d --rm --name prediction_app -p 5000:5000 prediction_app'

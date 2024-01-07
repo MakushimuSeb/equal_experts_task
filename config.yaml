@@ -1,0 +1,15 @@
+dataset:
+  path: "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+  names:
+    ["preg", "plas", "pres", "skin", "test", "mass", "pedi", "age", "class"]
+model:
+  test_size: 0.3
+  seed: 7
+  max_iterations: 500
+  model_dir: "models"
+  model_name: "prima_model"
+api:
+  local_url: "http://localhost:5000/predict"
+  remote_url: "http://ec2-54-209-225-200.compute-1.amazonaws.com:5000/predict"
+aws:
+  s3_bucket: "equalexpertstask"
